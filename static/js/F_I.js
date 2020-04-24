@@ -1,12 +1,12 @@
-// document.addEventListener( "DOMContentLoaded", getData, false );
+
 
 
 document.addEventListener( "DOMContentLoaded", createTable, false );
 
 
-current_page =1;
+// current_page =1;
 document.addEventListener( "DOMContentLoaded", function() {
-    getData(current_page);
+    getData(current_page = sessionStorage.current_page);
   });
 
 document.getElementById("Previous").addEventListener("click", function() {
@@ -38,11 +38,12 @@ function createTable() {
 }
 
 
-function getData(current_page){
+function getData(current_page = '1'){
     // console.log(typeof current_page);
-    var num_str = current_page.toString();
+    var num_str = current_page ;
     // console.log(typeof num_str);
     var url = '/?page=' + num_str
+    console.log(url)
     fetch(url)
     .then((response)=> response.json())
     .then(planets=>{
@@ -77,12 +78,29 @@ function append_json(planets){
 
 
 function calculatePage(delta){
-    console.log(current_page);
+    console.log(current_page, typeof(current_page));
+    if(sessionStorage.current_page){
+        current_page = Number(sessionStorage.current_page);
+        // sessionStorage.setItem("currentPage",current_page);
+        console.log(current_page, typeof(current_page));
+    }
+    else{
+        sessionStorage.current_page = 1;
+        
+        current_page = 1
+        console.log(current_page, typeof(current_page));
+    }
+     
     if((current_page ==1 && delta ==-1) || (current_page  ==6 && delta == 1)){
+            
         getData(current_page);
+        console.log(current_page, typeof(current_page));
     }
     else{
         current_page  = current_page  + delta;
+        sessionStorage.current_page = current_page ;    
         getData(current_page );
+        console.log(current_page, typeof(current_page));
     }
+
 }
